@@ -91,9 +91,18 @@
   }
 
   // ---------- Answer flow ----------
+  // After idleResetMs without activity: back to question 1 with an empty field, and
+  // close admin, so the next visitor starts fresh and can't reach the admin panel.
   function armIdleTimer() {
     clearTimeout(idleTimer);
-    if (step === 1) idleTimer = setTimeout(() => setStep(0), cfg.idleResetMs);
+    const dirty = step === 1 || input.value !== '' || !adminEl.hidden;
+    if (dirty) idleTimer = setTimeout(resetForNextVisitor, cfg.idleResetMs);
+  }
+
+  function resetForNextVisitor() {
+    if (busy) return armIdleTimer();
+    if (!adminEl.hidden) toggleAdmin(false);
+    setStep(0);
   }
 
   function setStep(n, value) {
@@ -166,6 +175,10 @@
     if (e.key === 'Escape' && step === 1 && !busy) setStep(0, firstAnswer);
   });
 
+  ['keydown', 'pointerdown'].forEach((type) => document.addEventListener(type, () => {
+    if (!busy) armIdleTimer();
+  }));
+
   // Keep the cursor in the answer field at the stand.
   document.addEventListener('click', (e) => {
     if (!busy && adminEl.hidden && !adminEl.contains(e.target)) input.focus();
@@ -202,6 +215,7 @@
   function toggleAdmin(open) {
     adminEl.hidden = !open;
     updateCurtain();
+    armIdleTimer();
     if (open) renderAdmin();
     else input.focus();
   }
