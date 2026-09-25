@@ -250,6 +250,10 @@
     resizeTimer = setTimeout(() => draw(), 150);
   });
 
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
   const fontReady = document.fonts && document.fonts.load
     ? document.fonts.load('40px Anton').catch(() => null)
     : Promise.resolve();

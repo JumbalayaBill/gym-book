@@ -9,7 +9,8 @@ animerte ordskyer – jo flere som har svart det samme ordet, jo større blir de
 - Ordskyene er skjult bak en «skillevegg» så nye besøkende ikke lar seg
   inspirere av andres svar. Etter at noen har svart, rulles skilleveggen opp i
   10 sekunder (eller til neste person begynner å skrive).
-- Fungerer uten internett når siden først er lastet (fontene ligger i `fonts/`).
+- Fungerer uten internett når siden først er lastet, også om noen trykker F5
+  (sidens filer lagres i nettleseren). Åpne siden én gang med nett før kvelden starter.
 
 ## Endre spørsmålene
 
