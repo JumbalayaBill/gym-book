@@ -72,6 +72,10 @@ inappropriate words and export the answers afterwards.
   It drops immediately if someone starts typing.
 - Clouds are also shown while the admin panel is open, and while the admin
   toggle «Vis ordskyene hele tiden» is on (not persisted).
+- A "shot clock" in the header counts down (whole seconds plus a draining bar)
+  until the curtain drops; the last 3 s turn red and pulse. It is hidden when
+  nothing will be hidden (staff toggle on or admin open) and when typing drops
+  the curtain early.
 
 ### Admin panel
 - Toggle with `Ctrl+Shift+A`, or type `/admin` + Enter in the answer field

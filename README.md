@@ -8,7 +8,8 @@ animerte ordskyer – jo flere som har svart det samme ordet, jo større blir de
 - Svarene lagres i nettleseren (`localStorage`) på maskinen ved standen.
 - Ordskyene er skjult bak en «skillevegg» så nye besøkende ikke lar seg
   inspirere av andres svar. Etter at noen har svart, rulles skilleveggen opp i
-  10 sekunder (eller til neste person begynner å skrive).
+  10 sekunder (eller til neste person begynner å skrive). En «shot clock» øverst
+  teller ned til skilleveggen går ned igjen.
 - Fungerer uten internett når siden først er lastet, også om noen trykker F5
   (sidens filer lagres i nettleseren). Åpne siden én gang med nett før kvelden starter.
 

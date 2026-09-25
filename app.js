@@ -38,6 +38,11 @@
   let idleTimer = null;
   let revealing = false;
   let revealTimer = null;
+  let revealEndsAt = 0;
+  let clockFrame = null;
+  const shotClock = $('shot-clock');
+  const shotNum = $('shot-num');
+  const shotBar = $('shot-bar');
 
   // ---------- Texts from config ----------
   document.title = cfg.title;
@@ -74,12 +79,38 @@
   // Clouds stay hidden so visitors aren't inspired by earlier answers.
   // They show after a submit (revealMs), while admin is open, or when staff turn them on.
   function updateCurtain() {
-    cloudsEl.classList.toggle('is-revealed', revealing || showToggle.checked || !adminEl.hidden);
+    const forced = showToggle.checked || !adminEl.hidden;
+    cloudsEl.classList.toggle('is-revealed', revealing || forced);
+    // The shot clock only makes sense when the curtain is actually going to drop.
+    if (revealing && !forced) startClock();
+    else stopClock();
+  }
+
+  function startClock() {
+    if (!shotClock.hidden) return;
+    shotClock.hidden = false;
+    const tick = () => {
+      const left = Math.max(0, revealEndsAt - Date.now());
+      const secs = Math.ceil(left / 1000);
+      if (shotNum.textContent !== String(secs)) shotNum.textContent = String(secs);
+      shotClock.classList.toggle('is-final', secs <= 3);
+      shotBar.style.transform = `scaleX(${left / cfg.revealMs})`;
+      clockFrame = requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  function stopClock() {
+    cancelAnimationFrame(clockFrame);
+    shotClock.hidden = true;
+    shotClock.classList.remove('is-final');
   }
 
   function reveal() {
     revealing = true;
+    revealEndsAt = Date.now() + cfg.revealMs;
     clearTimeout(revealTimer);
+    stopClock(); // restart from full on a new answer
     revealTimer = setTimeout(hideClouds, cfg.revealMs);
     updateCurtain();
   }
