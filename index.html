@@ -59,7 +59,7 @@
   <form id="answer-form" class="answer-bar" autocomplete="off">
     <div class="step"><span id="step-num">1</span><small>/2</small></div>
     <label for="answer" id="question-label"></label>
-    <input id="answer" name="answer" type="text" maxlength="30" placeholder="Skriv ett ord …"
+    <input id="answer" name="answer" type="text" maxlength="40" placeholder="Skriv ett eller to ord …"
            autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
     <button type="submit" aria-label="Send">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 5v7a3 3 0 0 1-3 3H6m0 0 4-4m-4 4 4 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -80,10 +80,14 @@
     <section>
       <h3 data-q="1"></h3>
       <ul id="admin-list-1" class="admin-list"></ul>
+      <button type="button" id="merge-btn-1" class="merge-btn" disabled>Slå sammen valgte</button>
+      <ul id="merges-1" class="merges-list"></ul>
     </section>
     <section>
       <h3 data-q="2"></h3>
       <ul id="admin-list-2" class="admin-list"></ul>
+      <button type="button" id="merge-btn-2" class="merge-btn" disabled>Slå sammen valgte</button>
+      <ul id="merges-2" class="merges-list"></ul>
     </section>
     <p class="admin-help">Åpne/lukk: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd>, eller skriv <kbd>/admin</kbd> i svarfeltet.</p>
   </aside>

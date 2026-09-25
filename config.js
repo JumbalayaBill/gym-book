@@ -3,7 +3,7 @@ window.GYM_CONFIG = {
   subtitle: 'Forskernatt · NTNU',
   title: 'Hva er gym for deg?',
   questions: [
-    'Beskriv "gym" med ett ord.',
+    'Beskriv "gym" med ett eller to ord.',
     'Nevn én ting du savner i gym.',
   ],
   thanks: 'Takk! Se etter ordene dine ↑',

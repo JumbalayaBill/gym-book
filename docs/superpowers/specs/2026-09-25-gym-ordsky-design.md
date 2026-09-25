@@ -97,6 +97,16 @@ where `t` is an ISO timestamp. Invalid/missing storage → start empty.
 bold condensed sports display font, words in court-line colours (yellow, red,
 blue, white, green). High contrast, readable from distance; large input bar.
 
+## Change 2026-09-25: two words, merge, raw CSV
+- Answers may have one or two words (both questions); 3+ words → «Maks to ord 🙂».
+  Max 40 characters. Question 1 text: «Beskriv "gym" med ett eller to ord.»
+- Each response stores the raw text (`r1`, `r2`, whitespace collapsed) and the
+  cloud form (`a1`, `a2`). The CSV exports the raw text, unchanged by admin actions.
+- Delete and merge are display rules in `rules.hidden[q]` / `rules.merges[q]`
+  (from → to pairs). Deleted words stay hidden for later answers; merges apply to
+  later answers; merges can be undone from the admin panel.
+- This replaces the earlier behaviour where Delete blanked the cell in the CSV.
+
 ## Error handling
 - `localStorage` unavailable/full: keep working in memory and show a small
   warning in the admin panel.

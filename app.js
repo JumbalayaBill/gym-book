@@ -2,7 +2,7 @@
   'use strict';
 
   const cfg = window.GYM_CONFIG;
-  const { createStore, normalizeWord, hasWhitespace, csvFilename } = window.GymStore;
+  const { createStore, normalizeWord, countWords, csvFilename } = window.GymStore;
   const { renderCloud, measureText } = window.GymCloud;
   const WORD_FONT = "Anton, Impact, 'Arial Narrow', sans-serif";
 
@@ -168,25 +168,24 @@
       toggleAdmin(true);
       return;
     }
-    if (hasWhitespace(raw)) return showHint('Bare ett ord 🙂');
-    const word = normalizeWord(raw);
-    if (!word) return showHint('Skriv ett ord først');
+    if (countWords(raw) > 2) return showHint('Maks to ord 🙂');
+    if (!normalizeWord(raw)) return showHint('Skriv noe først');
 
     if (step === 0) {
-      firstAnswer = word;
+      firstAnswer = raw; // kept as written; the store makes the cloud version
       setStep(1);
       return;
     }
 
     busy = true;
     clearTimeout(idleTimer);
-    store.addResponse(firstAnswer, word);
+    store.addResponse(firstAnswer, raw);
     input.value = '';
     input.blur();
     thanks.textContent = cfg.thanks;
     thanks.hidden = false;
     restartAnimation(thanks, 'play');
-    draw([firstAnswer, word]);
+    draw([store.displayWord(1, firstAnswer), store.displayWord(2, raw)]);
     reveal();
     setTimeout(() => {
       thanks.hidden = true;
@@ -216,11 +215,31 @@
   });
 
   // ---------- Admin ----------
+  const selected = { 1: new Set(), 2: new Set() }; // words ticked for merging
+
   function renderAdmin() {
     if (adminEl.hidden) return;
     [1, 2].forEach((q) => {
-      const items = store.counts(q).map(({ word, count }) => {
+      const counts = store.counts(q);
+      const present = new Set(counts.map((c) => c.word));
+      [...selected[q]].forEach((w) => { if (!present.has(w)) selected[q].delete(w); });
+      const mergeBtn = $('merge-btn-' + q);
+      const updateMergeBtn = () => {
+        mergeBtn.disabled = selected[q].size < 2;
+        mergeBtn.textContent = selected[q].size < 2 ? 'Slå sammen valgte' : `Slå sammen ${selected[q].size} valgte`;
+      };
+      updateMergeBtn();
+
+      const items = counts.map(({ word, count }) => {
         const li = document.createElement('li');
+        const pick = document.createElement('input');
+        pick.type = 'checkbox';
+        pick.checked = selected[q].has(word);
+        pick.setAttribute('aria-label', `Velg «${word}» for sammenslåing`);
+        pick.addEventListener('change', () => {
+          if (pick.checked) selected[q].add(word); else selected[q].delete(word);
+          updateMergeBtn();
+        });
         const w = document.createElement('span');
         w.className = 'admin-word';
         w.textContent = word;
@@ -235,10 +254,26 @@
           store.deleteWord(q, word);
           draw();
         });
-        li.append(w, c, del);
+        li.append(pick, w, c, del);
         return li;
       });
       $('admin-list-' + q).replaceChildren(...items);
+
+      const merges = store.merges(q).map(({ from, to }) => {
+        const li = document.createElement('li');
+        const label = document.createElement('span');
+        label.textContent = `${from} → ${to}`;
+        const undo = document.createElement('button');
+        undo.type = 'button';
+        undo.textContent = 'Angre';
+        undo.addEventListener('click', () => {
+          store.unmerge(q, from);
+          draw();
+        });
+        li.append(label, undo);
+        return li;
+      });
+      $('merges-' + q).replaceChildren(...merges);
     });
     $('admin-warning').hidden = store.isPersistent();
   }
@@ -265,6 +300,21 @@
 
   $('admin-close').addEventListener('click', () => toggleAdmin(false));
   $('csv-btn').addEventListener('click', downloadCSV);
+  [1, 2].forEach((q) => {
+    $('merge-btn-' + q).addEventListener('click', () => {
+      const words = [...selected[q]];
+      if (words.length < 2) return;
+      const counts = store.counts(q);
+      const suggestion = counts.find((c) => selected[q].has(c.word)).word; // most answered
+      const target = window.prompt(`Slå sammen ${words.map((w) => `«${w}»`).join(', ')} til:`, suggestion);
+      if (target == null || !normalizeWord(target)) return;
+      store.mergeWords(q, words, target);
+      selected[q].clear();
+      const highlights = [];
+      highlights[q - 1] = store.displayWord(q, target); // pulse the merged word
+      draw(highlights);
+    });
+  });
   showToggle.addEventListener('change', updateCurtain);
   document.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {

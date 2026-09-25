@@ -1,7 +1,7 @@
 # Hva er gym for deg? – ordsky til Forskernatt
 
 En enkel nettside til standen om kroppsøving på Forskernatt (NTNU).
-Besøkende svarer på to spørsmål med ett ord hver, og svarene vises som to
+Besøkende svarer på to spørsmål med ett eller to ord hver, og svarene vises som to
 animerte ordskyer – jo flere som har svart det samme ordet, jo større blir det.
 
 - Ingen innlogging, ingen server: alt er statiske filer.
@@ -19,7 +19,7 @@ animerte ordskyer – jo flere som har svart det samme ordet, jo større blir de
 
 ```js
 questions: [
-  'Beskriv "gym" med ett ord.',
+  'Beskriv "gym" med ett eller to ord.',
   'Nevn én ting du savner i gym.',
 ],
 ```
@@ -53,7 +53,7 @@ lagres svarene under en annen adresse enn på den publiserte siden.)
 - Bruk **samme nettleser og samme adresse** hele kvelden, og **ikke** privat
   vindu/inkognito – ellers forsvinner svarene.
 - Trykk **F11** for fullskjerm.
-- Flyten: skriv ord → **Enter** → skriv ord → **Enter**. **Esc** går tilbake
+- Flyten: skriv ett eller to ord → **Enter** → ett eller to ord → **Enter**. **Esc** går tilbake
   til spørsmål 1.
 
 ### Admin
@@ -61,11 +61,17 @@ lagres svarene under en annen adresse enn på den publiserte siden.)
 Åpne/lukk adminpanelet med **Ctrl+Shift+A**, eller skriv `/admin` i svarfeltet
 og trykk Enter (noen nettlesere bruker Ctrl+Shift+A selv).
 
-- **Slett** fjerner et ord fra skya (alle svar med det ordet på det
-  spørsmålet). Raden beholdes i eksporten med tomt felt.
+- **Slett** skjuler et ord fra skya (også hvis noen skriver det igjen senere).
+- **Slå sammen**: huk av to eller flere varianter (f.eks. «savner variasjon»,
+  «mangler variasjon», «variasjon») og trykk **Slå sammen valgte**. Du velger
+  navnet på det sammenslåtte ordet. Nye svar med en av variantene havner
+  automatisk i det sammenslåtte ordet. **Angre** i lista under oppløser en
+  sammenslåing.
+- Slett og Slå sammen påvirker bare ordskyene. CSV-en inneholder alltid det
+  folk faktisk skrev.
 - **Vis ordskyene hele tiden** ruller opp skilleveggen til du slår det av
   (fint for å diskutere resultatene). Ordskyene vises også mens adminpanelet er åpent.
-- **Last ned CSV** laster ned alle svar som
+- **Last ned CSV** laster ned alle svar slik de ble skrevet, som
   `respondee_number;answer_1;answer_2` (UTF-8, åpnes riktig i Excel).
 
 **Husk å laste ned CSV før du lukker nettleseren på slutten av kvelden.**
