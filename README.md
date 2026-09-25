@@ -6,6 +6,9 @@ animerte ordskyer – jo flere som har svart det samme ordet, jo større blir de
 
 - Ingen innlogging, ingen server: alt er statiske filer.
 - Svarene lagres i nettleseren (`localStorage`) på maskinen ved standen.
+- Ordskyene er skjult bak en «skillevegg» så nye besøkende ikke lar seg
+  inspirere av andres svar. Etter at noen har svart, rulles skilleveggen opp i
+  10 sekunder (eller til neste person begynner å skrive).
 - Fungerer uten internett når siden først er lastet (fontene ligger i `fonts/`).
 
 ## Endre spørsmålene
@@ -19,7 +22,8 @@ questions: [
 ],
 ```
 
-Her kan du også endre tittel, undertittel, takketekst, farger og hvor lenge
+Her kan du også endre tittel, undertittel, takketekst, farger, teksten på
+skilleveggen, hvor lenge ordskyene vises etter et svar (`revealMs`) og hvor lenge
 siden venter før den går tilbake til spørsmål 1 (`idleResetMs`).
 
 ## Kjøre lokalt
@@ -57,6 +61,8 @@ og trykk Enter (noen nettlesere bruker Ctrl+Shift+A selv).
 
 - **Slett** fjerner et ord fra skya (alle svar med det ordet på det
   spørsmålet). Raden beholdes i eksporten med tomt felt.
+- **Vis ordskyene hele tiden** ruller opp skilleveggen til du slår det av
+  (fint for å diskutere resultatene). Ordskyene vises også mens adminpanelet er åpent.
 - **Last ned CSV** laster ned alle svar som
   `respondee_number;answer_1;answer_2` (UTF-8, åpnes riktig i Excel).
 

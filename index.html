@@ -38,13 +38,17 @@
   <main class="clouds">
     <section class="panel is-empty">
       <h2 class="q-title"><span class="q-num">1</span><span data-q="1"></span></h2>
-      <div class="cloud" id="cloud-1"></div>
-      <p class="empty">Bli den første!</p>
+      <div class="stage">
+        <div class="cloud" id="cloud-1"></div>
+        <div class="curtain" aria-hidden="true"><p class="curtain-text"></p></div>
+      </div>
     </section>
     <section class="panel is-empty">
       <h2 class="q-title"><span class="q-num">2</span><span data-q="2"></span></h2>
-      <div class="cloud" id="cloud-2"></div>
-      <p class="empty">Bli den første!</p>
+      <div class="stage">
+        <div class="cloud" id="cloud-2"></div>
+        <div class="curtain" aria-hidden="true"><p class="curtain-text"></p></div>
+      </div>
     </section>
   </main>
 
@@ -68,6 +72,7 @@
     </div>
     <p id="admin-warning" class="admin-warning" hidden>Obs: nettleseren lagrer ikke svarene. Last ned CSV jevnlig, og ikke lukk fanen.</p>
     <button type="button" id="csv-btn" class="csv-btn">Last ned CSV</button>
+    <label class="admin-toggle"><input type="checkbox" id="show-toggle"> Vis ordskyene hele tiden</label>
     <section>
       <h3 data-q="1"></h3>
       <ul id="admin-list-1" class="admin-list"></ul>

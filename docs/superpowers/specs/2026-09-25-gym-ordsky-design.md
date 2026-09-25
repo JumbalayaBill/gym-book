@@ -64,6 +64,15 @@ inappropriate words and export the answers afterwards.
   `config.js` (hash of the word), so colours don't jump when ranks change.
 - Re-layout on window resize (debounced).
 
+### Hidden clouds ("skillevegg" curtain)
+- Added 2026-09-25 at the user's request, so visitors aren't inspired by earlier answers.
+- Clouds are blurred behind a curtain styled as a sports-hall dividing curtain,
+  with the text «Svar først, så får du se hva andre har svart».
+- After a submit the curtain rolls up for `revealMs` (10 s), then drops again.
+  It drops immediately if someone starts typing.
+- Clouds are also shown while the admin panel is open, and while the admin
+  toggle «Vis ordskyene hele tiden» is on (not persisted).
+
 ### Admin panel
 - Toggle with `Ctrl+Shift+A`, or type `/admin` + Enter in the answer field
   (fallback: some browsers reserve `Ctrl+Shift+A`). Not visible otherwise.

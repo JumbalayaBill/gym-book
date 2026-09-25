@@ -28,12 +28,16 @@
   const counter = $('count');
   const clouds = [$('cloud-1'), $('cloud-2')];
   const panels = clouds.map((c) => c.closest('.panel'));
+  const cloudsEl = document.querySelector('.clouds');
+  const showToggle = $('show-toggle');
   const measure = measureText(WORD_FONT);
 
   let step = 0;
   let firstAnswer = '';
   let busy = false;
   let idleTimer = null;
+  let revealing = false;
+  let revealTimer = null;
 
   // ---------- Texts from config ----------
   document.title = cfg.title;
@@ -49,7 +53,8 @@
     [1, 2].forEach((q) => {
       const words = store.counts(q);
       renderCloud(clouds[q - 1], words, { measure, palette: cfg.palette, highlight: highlights[q - 1] });
-      panels[q - 1].classList.toggle('is-empty', words.length === 0);
+      panels[q - 1].querySelector('.curtain-text').textContent =
+        words.length ? cfg.curtainText : cfg.curtainTextEmpty;
     });
     const total = String(store.responses().length);
     if (counter.textContent !== total) {
@@ -63,6 +68,26 @@
     el.classList.remove(cls);
     void el.offsetWidth;
     el.classList.add(cls);
+  }
+
+  // ---------- Curtain ----------
+  // Clouds stay hidden so visitors aren't inspired by earlier answers.
+  // They show after a submit (revealMs), while admin is open, or when staff turn them on.
+  function updateCurtain() {
+    cloudsEl.classList.toggle('is-revealed', revealing || showToggle.checked || !adminEl.hidden);
+  }
+
+  function reveal() {
+    revealing = true;
+    clearTimeout(revealTimer);
+    revealTimer = setTimeout(hideClouds, cfg.revealMs);
+    updateCurtain();
+  }
+
+  function hideClouds() {
+    revealing = false;
+    clearTimeout(revealTimer);
+    updateCurtain();
   }
 
   // ---------- Answer flow ----------
@@ -122,6 +147,7 @@
     thanks.hidden = false;
     restartAnimation(thanks, 'play');
     draw([firstAnswer, word]);
+    reveal();
     setTimeout(() => {
       thanks.hidden = true;
       firstAnswer = '';
@@ -132,6 +158,7 @@
 
   input.addEventListener('input', () => {
     hideHint();
+    if (revealing) hideClouds(); // next visitor started typing
     armIdleTimer();
   });
 
@@ -174,6 +201,7 @@
 
   function toggleAdmin(open) {
     adminEl.hidden = !open;
+    updateCurtain();
     if (open) renderAdmin();
     else input.focus();
   }
@@ -192,6 +220,7 @@
 
   $('admin-close').addEventListener('click', () => toggleAdmin(false));
   $('csv-btn').addEventListener('click', downloadCSV);
+  showToggle.addEventListener('change', updateCurtain);
   document.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
       e.preventDefault();
