@@ -34,7 +34,8 @@
     let state = { nextN: 1, responses: [] };
     let persistent = !!storage;
 
-    if (storage) {
+    function load() {
+      if (!storage) return;
       try {
         const raw = storage.getItem(KEY);
         if (raw) {
@@ -47,6 +48,7 @@
         persistent = false;
       }
     }
+    load();
 
     function save() {
       if (!storage) return;
@@ -94,6 +96,10 @@
       },
       isPersistent() {
         return persistent;
+      },
+      // Re-read storage, e.g. after another tab changed it (window 'storage' event).
+      reload() {
+        load();
       },
     };
   }

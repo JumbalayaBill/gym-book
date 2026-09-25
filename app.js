@@ -231,6 +231,14 @@
   });
 
   // ---------- Start ----------
+  // Another tab (same kiosk URL) changed the answers: take them over instead of
+  // overwriting them on our next save.
+  window.addEventListener('storage', (e) => {
+    if (e.key !== window.GymStore.KEY) return;
+    store.reload();
+    draw();
+  });
+
   // Redraw whenever a cloud changes size (window resize, answer bar height, …).
   let resizeTimer = null;
   const sizes = clouds.map(() => '');

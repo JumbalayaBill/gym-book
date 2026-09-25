@@ -81,6 +81,17 @@
     assert(!s.isPersistent());
   });
 
+  test('reload picks up changes written by another tab', () => {
+    const storage = fakeStorage();
+    const tabA = createStore(storage);
+    const tabB = createStore(storage);
+    tabA.addResponse('gøy', 'dans');
+    tabB.reload();
+    tabB.addResponse('lek', 'ski');
+    tabA.reload();
+    assertEqual(tabA.responses().map((r) => [r.n, r.a1]), [[1, 'gøy'], [2, 'lek']]);
+  });
+
   test('csvFilename uses local date', () => {
     assertEqual(csvFilename(new Date(2026, 8, 25, 23, 30)), 'gym-ordsky-2026-09-25.csv');
   });
