@@ -45,6 +45,8 @@ inappropriate words and export the answers afterwards.
   punctuation. Empty input is ignored.
 - If the input contains whitespace, show a hint «Bare ett ord 🙂» and do not advance.
 - Max length 30 characters.
+- If question 2 is left untouched for 60 s (`idleResetMs`), the form resets to
+  question 1 so the next visitor starts fresh.
 
 ### Word clouds
 - Two clouds side by side, each headed by its question.
@@ -58,12 +60,13 @@ inappropriate words and export the answers afterwards.
   elements are reused and moved/resized with CSS transitions (transform +
   font-size), so words slide and grow. New words fade/scale in. The word(s) just
   submitted get a brief pulse highlight.
-- Colours cycle through the gym-floor line palette from `config.js`; the
-  largest words get the strongest colours.
+- Each word gets a stable colour from the gym-floor line palette in
+  `config.js` (hash of the word), so colours don't jump when ranks change.
 - Re-layout on window resize (debounced).
 
 ### Admin panel
-- Toggle with `Ctrl+Shift+A`. Not visible otherwise.
+- Toggle with `Ctrl+Shift+A`, or type `/admin` + Enter in the answer field
+  (fallback: some browsers reserve `Ctrl+Shift+A`). Not visible otherwise.
 - Lists all words per question with count and a delete button. Deleting a word
   blanks that answer in every response for that question (rows are kept, so
   respondent numbers stay stable).
