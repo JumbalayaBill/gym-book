@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hva er gym for deg?</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230d2c30%22/%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2226%22 fill=%22none%22 stroke=%22%23ffd23f%22 stroke-width=%228%22/%3E%3C/svg%3E">
-  <link rel="preload" href="fonts/anton-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
   <script src="config.js" defer></script>
   <script src="store.js" defer></script>
@@ -62,6 +61,22 @@
   </form>
 
 
-  <aside id="admin" class="admin" hidden></aside>
+  <aside id="admin" class="admin" hidden aria-label="Admin">
+    <div class="admin-head">
+      <h2>Admin</h2>
+      <button type="button" id="admin-close" class="admin-close" aria-label="Lukk">✕</button>
+    </div>
+    <p id="admin-warning" class="admin-warning" hidden>Obs: nettleseren lagrer ikke svarene. Last ned CSV jevnlig, og ikke lukk fanen.</p>
+    <button type="button" id="csv-btn" class="csv-btn">Last ned CSV</button>
+    <section>
+      <h3 data-q="1"></h3>
+      <ul id="admin-list-1" class="admin-list"></ul>
+    </section>
+    <section>
+      <h3 data-q="2"></h3>
+      <ul id="admin-list-2" class="admin-list"></ul>
+    </section>
+    <p class="admin-help">Åpne/lukk: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd>, eller skriv <kbd>/admin</kbd> i svarfeltet.</p>
+  </aside>
 </body>
 </html>

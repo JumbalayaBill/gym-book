@@ -2,7 +2,7 @@
   'use strict';
 
   const cfg = window.GYM_CONFIG;
-  const { createStore, normalizeWord, hasWhitespace } = window.GymStore;
+  const { createStore, normalizeWord, hasWhitespace, csvFilename } = window.GymStore;
   const { renderCloud, measureText } = window.GymCloud;
   const WORD_FONT = "Anton, Impact, 'Arial Narrow', sans-serif";
 
@@ -144,13 +144,71 @@
     if (!busy && adminEl.hidden && !adminEl.contains(e.target)) input.focus();
   });
 
-  // ---------- Admin (filled in by the admin panel task) ----------
-  function renderAdmin() {}
-  function toggleAdmin() {}
+  // ---------- Admin ----------
+  function renderAdmin() {
+    if (adminEl.hidden) return;
+    [1, 2].forEach((q) => {
+      const items = store.counts(q).map(({ word, count }) => {
+        const li = document.createElement('li');
+        const w = document.createElement('span');
+        w.className = 'admin-word';
+        w.textContent = word;
+        const c = document.createElement('span');
+        c.className = 'admin-count';
+        c.textContent = count;
+        const del = document.createElement('button');
+        del.type = 'button';
+        del.textContent = 'Slett';
+        del.addEventListener('click', () => {
+          if (!window.confirm(`Slette «${word}» (${count} svar)?`)) return;
+          store.deleteWord(q, word);
+          draw();
+        });
+        li.append(w, c, del);
+        return li;
+      });
+      $('admin-list-' + q).replaceChildren(...items);
+    });
+    $('admin-warning').hidden = store.isPersistent();
+  }
+
+  function toggleAdmin(open) {
+    adminEl.hidden = !open;
+    if (open) renderAdmin();
+    else input.focus();
+  }
+
+  function downloadCSV() {
+    const blob = new Blob([store.toCSV()], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = csvFilename(new Date());
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  $('admin-close').addEventListener('click', () => toggleAdmin(false));
+  $('csv-btn').addEventListener('click', downloadCSV);
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+      e.preventDefault();
+      toggleAdmin(adminEl.hidden);
+    } else if (e.key === 'Escape' && !adminEl.hidden) {
+      toggleAdmin(false);
+    }
+  });
 
   // ---------- Start ----------
+  // Redraw whenever a cloud changes size (window resize, answer bar height, …).
   let resizeTimer = null;
-  window.addEventListener('resize', () => {
+  const sizes = clouds.map(() => '');
+  const resizeObserver = new ResizeObserver(() => {
+    const now = clouds.map((c) => c.clientWidth + 'x' + c.clientHeight);
+    if (now.join() === sizes.join()) return;
+    now.forEach((v, i) => { sizes[i] = v; });
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => draw(), 150);
   });
@@ -159,7 +217,8 @@
     ? document.fonts.load('40px Anton').catch(() => null)
     : Promise.resolve();
   fontReady.then(() => {
-    draw();
     setStep(0);
+    draw();
+    clouds.forEach((c) => resizeObserver.observe(c));
   });
 })();
