@@ -164,6 +164,29 @@
     assertEqual(tabA.responses().map((r) => [r.n, r.a1]), [[1, 'gøy'], [2, 'lek']]);
   });
 
+  test('clearAll empties answers, CSV and rules, restarts numbering, and persists', () => {
+    const storage = fakeStorage();
+    const s = createStore(storage);
+    s.addResponse('test', 'savner variasjon');
+    s.addResponse('dritt', 'variasjon');
+    s.mergeWords(2, ['savner variasjon', 'variasjon'], 'variasjon');
+    s.deleteWord(1, 'dritt');
+    s.clearAll();
+    assertEqual(s.responses(), []);
+    assertEqual(s.counts(1), []);
+    assertEqual(s.merges(2), []);
+    assertEqual(s.toCSV(), '\uFEFFrespondee_number;answer_1;answer_2\r\n');
+    assertEqual(s.addResponse('dritt', 'savner variasjon').n, 1);
+    assertEqual(s.counts(1), [{ word: 'dritt', count: 1 }], 'old delete rules are gone');
+    assertEqual(s.counts(2), [{ word: 'savner variasjon', count: 1 }], 'old merges are gone');
+    const reloaded = createStore(storage);
+    assertEqual(reloaded.responses().map((r) => r.n), [1]);
+  });
+
+  test('csvFilename accepts a suffix for the backup file', () => {
+    assertEqual(csvFilename(new Date(2026, 8, 25), 'før-sletting'), 'gym-ordsky-2026-09-25-før-sletting.csv');
+  });
+
   test('csvFilename uses local date', () => {
     assertEqual(csvFilename(new Date(2026, 8, 25, 23, 30)), 'gym-ordsky-2026-09-25.csv');
   });

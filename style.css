@@ -439,6 +439,23 @@ h1 {
   background: none;
   color: var(--muted);
 }
+.danger-zone {
+  margin-top: 40px;
+  padding: 16px;
+  border: 2px solid var(--red);
+  border-radius: 12px;
+}
+.admin .danger-zone h3 { margin: 0 0 6px; color: var(--red); }
+.danger-zone p { margin: 0 0 12px; color: var(--muted); font-size: 16px; line-height: 1.35; }
+.nuke-btn {
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--red);
+  color: #fff;
+  font-size: 20px;
+}
 .admin-help { margin-top: 24px; color: var(--muted); font-size: 16px; }
 .admin kbd { padding: 1px 6px; border-radius: 4px; background: rgba(244, 241, 234, 0.12); font-family: inherit; }
 

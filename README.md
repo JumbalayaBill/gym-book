@@ -74,6 +74,12 @@ og trykk Enter (noen nettlesere bruker Ctrl+Shift+A selv).
 - **Last ned CSV** laster ned alle svar slik de ble skrevet, som
   `respondee_number;answer_1;answer_2` (UTF-8, åpnes riktig i Excel).
 
+- **Slett alle svar** (nederst i adminpanelet) gir et helt blankt ark: alle svar,
+  sammenslåinger og slettede ord fjernes, også fra CSV-en, og nummereringen
+  starter på 1 igjen. Du må skrive **SLETT** for å bekrefte. En kopi av svarene
+  lastes ned først (`…-før-sletting.csv`). Bruk dette for å fjerne testdata før
+  dere går live.
+
 **Husk å laste ned CSV før du lukker nettleseren på slutten av kvelden.**
 
 ## Tester

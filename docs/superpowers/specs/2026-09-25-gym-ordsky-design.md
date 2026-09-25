@@ -107,6 +107,11 @@ blue, white, green). High contrast, readable from distance; large input bar.
   later answers; merges can be undone from the admin panel.
 - This replaces the earlier behaviour where Delete blanked the cell in the CSV.
 
+## Change 2026-09-25: delete everything
+- Admin danger zone at the bottom: «Slett alle svar» removes all responses,
+  numbering and delete/merge rules (CSV becomes header only). Requires typing
+  SLETT; downloads `gym-ordsky-YYYY-MM-DD-før-sletting.csv` first when there is data.
+
 ## Error handling
 - `localStorage` unavailable/full: keep working in memory and show a small
   warning in the admin panel.

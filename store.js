@@ -25,9 +25,10 @@
     return String(raw == null ? '' : raw).trim().replace(/\s+/g, ' ');
   }
 
-  function csvFilename(date) {
+  function csvFilename(date, suffix) {
     const pad = (n) => String(n).padStart(2, '0');
-    return `gym-ordsky-${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}.csv`;
+    const day = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    return `gym-ordsky-${day}${suffix ? '-' + suffix : ''}.csv`;
   }
 
   function csvField(value) {
@@ -155,6 +156,11 @@
       },
       isPersistent() {
         return persistent;
+      },
+      // Blank sheet: removes all answers, numbering and delete/merge rules.
+      clearAll() {
+        state = withRules({ nextN: 1, responses: [] });
+        save();
       },
       // Re-read storage, e.g. after another tab changed it (window 'storage' event).
       reload() {

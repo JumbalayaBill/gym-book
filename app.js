@@ -286,12 +286,12 @@
     else input.focus();
   }
 
-  function downloadCSV() {
+  function downloadCSV(suffix) {
     const blob = new Blob([store.toCSV()], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = csvFilename(new Date());
+    a.download = csvFilename(new Date(), suffix);
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -299,7 +299,19 @@
   }
 
   $('admin-close').addEventListener('click', () => toggleAdmin(false));
-  $('csv-btn').addEventListener('click', downloadCSV);
+  $('csv-btn').addEventListener('click', () => downloadCSV());
+  $('nuke-btn').addEventListener('click', () => {
+    const total = store.responses().length;
+    const typed = window.prompt(
+      `Dette sletter alle ${total} svar, sammenslåinger og slettede ord, også fra CSV-en. ` +
+      'Det kan ikke angres. En kopi av svarene lastes ned først.\n\nSkriv SLETT for å bekrefte:');
+    if (typed == null || typed.trim().toUpperCase() !== 'SLETT') return;
+    if (total > 0) downloadCSV('før-sletting'); // safety net
+    store.clearAll();
+    selected[1].clear();
+    selected[2].clear();
+    draw();
+  });
   [1, 2].forEach((q) => {
     $('merge-btn-' + q).addEventListener('click', () => {
       const words = [...selected[q]];
