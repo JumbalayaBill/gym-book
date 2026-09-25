@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hva er gym for deg?</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230d2c30%22/%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2226%22 fill=%22none%22 stroke=%22%23ffd23f%22 stroke-width=%228%22/%3E%3C/svg%3E">
+  <link rel="preload" href="fonts/anton-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js" defer></script>
+  <script src="store.js" defer></script>
+  <script src="cloud.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="court" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <g fill="none" stroke="currentColor" stroke-width="4">
+        <rect x="60" y="60" width="1480" height="780" rx="4"/>
+        <line x1="800" y1="60" x2="800" y2="840"/>
+        <circle cx="800" cy="450" r="120"/>
+        <circle cx="800" cy="450" r="10" fill="currentColor"/>
+        <path d="M60 170 H300 A280 280 0 0 1 300 730 H60"/>
+        <path d="M1540 170 H1300 A280 280 0 0 0 1300 730 H1540"/>
+        <rect x="60" y="330" width="190" height="240"/>
+        <rect x="1350" y="330" width="190" height="240"/>
+      </g>
+    </svg>
+  </div>
+
+  <header class="top">
+    <div>
+      <p class="eyebrow" id="subtitle"></p>
+      <h1 id="title"></h1>
+    </div>
+    <p class="counter"><b id="count">0</b> svar</p>
+  </header>
+
+  <main class="clouds">
+    <section class="panel is-empty">
+      <h2 class="q-title"><span class="q-num">1</span><span data-q="1"></span></h2>
+      <div class="cloud" id="cloud-1"></div>
+      <p class="empty">Bli den første!</p>
+    </section>
+    <section class="panel is-empty">
+      <h2 class="q-title"><span class="q-num">2</span><span data-q="2"></span></h2>
+      <div class="cloud" id="cloud-2"></div>
+      <p class="empty">Bli den første!</p>
+    </section>
+  </main>
+
+  <form id="answer-form" class="answer-bar" autocomplete="off">
+    <div class="step"><span id="step-num">1</span><small>/2</small></div>
+    <label for="answer" id="question-label"></label>
+    <input id="answer" name="answer" type="text" maxlength="30" placeholder="Skriv ett ord …"
+           autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+    <button type="submit" aria-label="Send">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 5v7a3 3 0 0 1-3 3H6m0 0 4-4m-4 4 4 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <p id="hint" class="hint" aria-live="polite"></p>
+    <div id="thanks" class="thanks" hidden></div>
+  </form>
+
+
+  <aside id="admin" class="admin" hidden></aside>
+</body>
+</html>

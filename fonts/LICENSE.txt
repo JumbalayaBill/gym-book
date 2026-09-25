@@ -1,0 +1,3 @@
+Anton (Vernon Adams) and Barlow Condensed (Jeremy Tribby) are licensed under the
+SIL Open Font License 1.1 — https://openfontlicense.org
+Files obtained from the @fontsource npm packages (latin subset).

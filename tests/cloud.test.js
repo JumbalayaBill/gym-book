@@ -39,6 +39,12 @@
     assertEqual(size('ball'), size('dans'));
   });
 
+  test('the most answered word clearly dominates (double count ≥ 1.6× size)', () => {
+    const layout = layoutCloud([{ word: 'gøy', count: 6 }, { word: 'lek', count: 3 }], 1000, 700, measure);
+    const size = (w) => layout.find((b) => b.word === w).size;
+    assert(size('gøy') / size('lek') >= 1.6, 'ratio was ' + (size('gøy') / size('lek')).toFixed(2));
+  });
+
   test('150 unique words still fit, terminate and do not overlap', () => {
     const words = Array.from({ length: 150 }, (_, i) => ({ word: 'w' + i, count: 1 }));
     const layout = layoutCloud(words, 600, 400, measure);

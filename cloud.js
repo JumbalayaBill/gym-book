@@ -3,6 +3,7 @@
 
   const SPIRAL_SPACING = 8; // px between spiral turns
   const ARC_STEP = 4;       // px along the spiral between candidate positions
+  const SIZE_EXPONENT = 0.8; // 0.5 = sqrt (flat), 1 = linear (strong contrast)
 
   function sortWords(words) {
     return words.slice().sort((a, b) => b.count - a.count || a.word.localeCompare(b.word, 'nb'));
@@ -22,7 +23,7 @@
     const result = [];
 
     for (const item of sorted) {
-      const size = Math.max(minSize, maxSize * Math.sqrt(item.count / maxCount));
+      const size = Math.max(minSize, maxSize * Math.pow(item.count / maxCount, SIZE_EXPONENT));
       const m = measure(item.word, size);
       const box = { x: 0, y: 0, w: m.w + pad, h: m.h + pad };
       let found = false;
