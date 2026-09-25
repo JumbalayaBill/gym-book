@@ -52,6 +52,21 @@
     checkValid(layout, 600, 400);
   });
 
+  test('long tail keeps a readable minimum size and always shows the highlighted word', () => {
+    // Realistic end-of-evening Q2: a few popular words and a long tail of singles.
+    const words = Array.from({ length: 300 }, (_, i) => ({
+      word: 'ord' + String(i).padStart(3, '0'),
+      count: i < 5 ? 20 - i * 3 : i < 40 ? 2 : 1,
+    }));
+    words.push({ word: 'ørsmå', count: 1 }); // sorts last alphabetically
+    const layout = layoutCloud(words, 560, 380, measure, { highlight: ['ørsmå'] });
+    checkValid(layout, 560, 380);
+    const minSize = Math.min(...layout.map((b) => b.size));
+    assert(minSize >= 16, 'min size was ' + minSize.toFixed(1));
+    assert(layout.some((b) => b.word === 'ørsmå'), 'highlighted word missing');
+    for (let i = 0; i < 5; i++) assert(layout.some((b) => b.word === words[i].word), 'popular word missing');
+  });
+
   test('a 30-character word fits a narrow cloud', () => {
     const layout = layoutCloud([{ word: 'x'.repeat(30), count: 5 }, { word: 'kort', count: 1 }], 300, 300, measure);
     assertEqual(layout.length, 2);

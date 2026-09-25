@@ -5,8 +5,12 @@
   const ARC_STEP = 4;       // px along the spiral between candidate positions
   const SIZE_EXPONENT = 0.8; // 0.5 = sqrt (flat), 1 = linear (strong contrast)
 
-  function sortWords(words) {
-    return words.slice().sort((a, b) => b.count - a.count || a.word.localeCompare(b.word, 'nb'));
+  // Count desc; among equal counts the highlighted (just submitted) words go first,
+  // so they are placed before the long tail and never dropped.
+  function sortWords(words, highlight) {
+    const hi = new Set(highlight);
+    return words.slice().sort((a, b) =>
+      b.count - a.count || hi.has(b.word) - hi.has(a.word) || a.word.localeCompare(b.word, 'nb'));
   }
 
   function overlaps(a, b) {
@@ -58,17 +62,21 @@
   function layoutCloud(words, width, height, measure, opts) {
     opts = opts || {};
     if (!words.length || width <= 0 || height <= 0) return [];
-    const sorted = sortWords(words);
+    const highlight = [].concat(opts.highlight || []);
+    const sorted = sortWords(words, highlight);
     const minSize = opts.minSize != null ? opts.minSize : 16;
     const maxSize = opts.maxSize != null ? opts.maxSize : Math.min(height / 3.5, width / 5);
     const pad = opts.padding != null ? opts.padding : 6;
+    // Shrink the big words until everything fits, but never below minSize (readability
+    // at a distance). If it still doesn't fit, drop the lowest-count words instead.
     let scale = 1;
     for (let i = 0; i < 14; i++) {
-      const res = tryLayout(sorted, width, height, measure, minSize * scale, maxSize * scale, pad, false);
+      const res = tryLayout(sorted, width, height, measure, minSize, Math.max(minSize, maxSize * scale), pad, false);
       if (res) return res;
+      if (maxSize * scale <= minSize) break;
       scale *= 0.85;
     }
-    return tryLayout(sorted, width, height, measure, minSize * scale, maxSize * scale, pad, true);
+    return tryLayout(sorted, width, height, measure, minSize, Math.max(minSize, maxSize * scale), pad, true);
   }
 
   let measureCtx = null;
