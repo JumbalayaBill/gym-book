@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="no">
+<head><meta charset="utf-8"><title>Gym-ordsky – tester</title>
+<style>body{font:16px/1.5 monospace;padding:2rem;background:#111;color:#eee}.f{color:#ff6b6b}.p{color:#6bff95}</style></head>
+<body>
+<h1>Tester</h1><pre id="out"></pre>
+<script src="../store.js"></script>
+<script src="../cloud.js"></script>
+<script src="harness.js"></script>
+<script src="store.test.js"></script>
+<script src="cloud.test.js"></script>
+<script>
+  const out = document.getElementById('out');
+  runTests((line) => {
+    const s = document.createElement('span');
+    s.className = line.startsWith('✗') ? 'f' : 'p';
+    s.textContent = line + '\n';
+    out.appendChild(s);
+  });
+</script>
+</body>
+</html>
